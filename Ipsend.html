@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Log IP</title>
+</head>
+<body>
+  <button onclick="logIP()">Click</button>
+
+  <script>
+    async function logIP() {
+      try {
+        const response = await fetch('https://api.ipify.org?format=json');
+        const data = await response.json();
+        const ip = data.ip;
+
+        // Kirim ke Apps Script Web App
+        fetch("https://script.google.com/macros/s/AKfycbxFtPP3r2lQ19mxCAux0cfQTsaOxXMwkAT_xWDncLxXzKcIJTe12bP1uEAsJuVZ_MGB/exec", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+          },
+          body: new URLSearchParams({
+            nama: "Anonim", // Atau ambil dari input form
+            ip: ip
+          })
+        })
+        .then(res => res.text())
+        .then(teks => alert("Respon server: " + teks))
+        .catch(err => alert("Gagal kirim ke server: " + err));
+      } catch (err) {
+        alert("Gagal ambil IP: " + err);
+      }
+    }
+  </script>
+</body>
+</html>
